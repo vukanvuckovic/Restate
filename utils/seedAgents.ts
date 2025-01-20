@@ -12,15 +12,18 @@ const agentNames: string[] = [
 
 export const seedAgents = async () => {
   try {
-    const images = (await storage.listFiles(config.agentImages)).files;
-    const agents = (await databases.listDocuments(config.db, config.agents))
-      .documents;
+    const images = [
+      ...Array.from({ length: 5 }).map(
+        (_, index) => `@/assets/agents/a${index + 1}.jpg`
+      ),
+    ];
 
-    for (let i = 0; i < agents.length; i++) {
-      await databases.updateDocument(config.db, config.agents, agents[i].$id, {
+    for (let i = 0; i < 5; i++) {
+      await databases.createDocument(config.db, config.agents, ID.unique(), {
         name: agentNames[i],
-        image: images[i].$id,
+        image: images[i],
       });
+      console.log("seeded " + (i + 1));
     }
 
     console.log("finished");

@@ -33,7 +33,7 @@ export const seedReviews = async () => {
       const propertyId = property.$id;
 
       // Ensure at least 2 reviews per property
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         const { name, review } = getRandomReview();
         const rating = Math.floor(Math.random() * 5) + 1; // Random rating between 1-5
 
@@ -92,6 +92,36 @@ export const linkPropertiesWithReviews = async () => {
     console.log("finished seeding something");
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const updatePropertyRatings = async () => {
+  try {
+    const properties = await databases.listDocuments(
+      config.db,
+      config.properties
+    );
+
+    for (const property of properties.documents) {
+      // Ensure reviews exist
+      const totalReviews = property.reviews.length;
+      const sumRatings = property.reviews.reduce(
+        (sum: any, review: any) => sum + (review.rating || 0),
+        0
+      );
+      const averageRating = totalReviews > 0 ? sumRatings / totalReviews : 0;
+
+      await databases.updateDocument(
+        config.db,
+        config.properties,
+        property.$id,
+        {
+          rating: averageRating, // Store as a rounded value (optional)
+        }
+      );
+    }
+  } catch (error) {
+    console.error("Error updating property ratings:", error);
   }
 };
 

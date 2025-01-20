@@ -7,7 +7,7 @@ export const config = {
   properties: process.env.EXPO_PUBLIC_PROPERTIES_COLLECTION!,
   users: process.env.EXPO_PUBLIC_USERS_COLLECTION!,
   bookings: process.env.EXPO_PUBLIC_BOOKINGS_COLLECTION!,
-  propertyImages: process.env.EXPO_PUBLIC_PROPERTIES_BUCKET!,
-  agentImages: process.env.EXPO_PUBLIC_AGENTS_BUCKET!,
-  admin: process.env.EXPO_PUBLIC_ADMIN!,
+  // propertyImages: process.env.EXPO_PUBLIC_PROPERTIES_BUCKET!,
+  // agentImages: process.env.EXPO_PUBLIC_AGENTS_BUCKET!,
+  // admin: process.env.EXPO_PUBLIC_ADMIN!,
 };

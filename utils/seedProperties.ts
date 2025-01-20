@@ -1,6 +1,7 @@
 import { databases, storage } from "@/appwrite/appwrite";
 import { config } from "@/appwrite/config";
-import { ID } from "react-native-appwrite";
+import { propertyImages } from "@/constants/data";
+import { ID, Query } from "react-native-appwrite";
 
 const categories = [
   "apartment",
@@ -13,8 +14,8 @@ const categories = [
 ] as const;
 
 const facilities = [
-  "parking",
-  "pool",
+  "carParking",
+  "swimmingPool",
   "gym",
   "restaurant",
   "wifi",
@@ -102,19 +103,18 @@ export const seedProperties = async () => {
     console.log("Fetched agents:", agents.length);
 
     // Step 3: Fetch images
-    const imageList = await storage.listFiles(config.propertyImages);
-    const images = imageList.files;
+    const images = [
+      ...Array.from({ length: 19 }).map(
+        (_, index) => `@/assets/properties/${index + 1}.jpg`
+      ),
+    ];
     if (images.length === 0) {
       console.log("No images available, skipping property seeding.");
       return;
     }
 
     // Pre-fetch all image URLs
-    const imageUrls = await Promise.all(
-      images.map((item) =>
-        storage.getFilePreview(config.propertyImages, item.$id)
-      )
-    );
+    const imageUrls = images;
     console.log("Fetched images:", images.length);
 
     // Step 4: Generate and seed new properties
@@ -179,5 +179,66 @@ export const seedProperties = async () => {
     console.log("Property seeding completed.");
   } catch (error) {
     console.error("Error during property seeding:", error);
+  }
+};
+
+export const updatePropertyImages = async () => {
+  try {
+    const properties = (
+      await databases.listDocuments(config.db, config.properties, [
+        Query.limit(100),
+      ])
+    ).documents;
+
+    const getRandomImages = (images: string[], count: number) => {
+      const shuffled = [...images]; // Copy the original array
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // Random index
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
+      }
+      return shuffled.slice(0, count);
+    };
+
+    for (const property of properties) {
+      const randomImages = getRandomImages(propertyImages, 5);
+      await databases.updateDocument(
+        config.db,
+        config.properties,
+        property.$id,
+        {
+          images: randomImages,
+        }
+      );
+      console.log("updated one");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateRatings = async () => {
+  try {
+    const properties1 = await databases.listDocuments(
+      config.db,
+      config.properties,
+      [Query.limit(100)]
+    );
+    const properties = properties1.documents;
+
+    for (const property of properties) {
+      let total = 0;
+      property.reviews.forEach((item: any) => (total += item.rating));
+      await databases.updateDocument(
+        config.db,
+        config.properties,
+        property.$id,
+        {
+          rating: total / property.reviews.length,
+        }
+      );
+      console.log("done");
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
