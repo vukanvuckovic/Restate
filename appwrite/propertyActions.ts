@@ -1,17 +1,16 @@
 import { Query } from "react-native-appwrite";
 import { databases } from "./appwrite";
 import { config } from "./config";
+import { Property } from "@/types";
 
-export async function getLatestProperties() {
+export async function getLatestProperties(): Promise<Property[]> {
   try {
     const result = await databases.listDocuments(config.db, config.properties, [
       Query.orderAsc("$createdAt"),
       Query.limit(5),
     ]);
-
-    return result.documents;
-  } catch (error) {
-    console.error(error);
+    return result.documents as Property[];
+  } catch {
     return [];
   }
 }
@@ -36,7 +35,7 @@ export async function getProperties({
   areaTo?: string;
   bathrooms?: string;
   bedrooms?: string;
-}) {
+}): Promise<Property[]> {
   try {
     const buildQuery = [Query.orderDesc("$createdAt")];
 
@@ -58,22 +57,22 @@ export async function getProperties({
       buildQuery.push(Query.limit(limit));
     }
 
-    if (priceTo != "" && priceTo) {
+    if (priceTo) {
       buildQuery.push(Query.lessThan("price", parseInt(priceTo)));
     }
-    if (priceFrom != "" && priceFrom) {
+    if (priceFrom) {
       buildQuery.push(Query.greaterThan("price", parseInt(priceFrom)));
     }
-    if (areaTo != "" && areaTo) {
+    if (areaTo) {
       buildQuery.push(Query.lessThan("area", parseInt(areaTo)));
     }
-    if (areaFrom != "" && areaFrom) {
+    if (areaFrom) {
       buildQuery.push(Query.greaterThan("area", parseInt(areaFrom)));
     }
-    if (bathrooms != "" && bathrooms) {
+    if (bathrooms) {
       buildQuery.push(Query.greaterThanEqual("bathrooms", parseInt(bathrooms)));
     }
-    if (bedrooms != "" && bedrooms) {
+    if (bedrooms) {
       buildQuery.push(Query.greaterThanEqual("bedrooms", parseInt(bedrooms)));
     }
 
@@ -82,24 +81,17 @@ export async function getProperties({
       config.properties,
       buildQuery
     );
-
-    return result.documents;
-  } catch (error) {
-    console.error(error);
+    return result.documents as Property[];
+  } catch {
     return [];
   }
 }
 
-export async function getProperty({ id }: { id: string }) {
+export async function getProperty(id: string): Promise<Property | null> {
   try {
-    const property = await databases.getDocument(
-      config.db,
-      config.properties,
-      id
-    );
-
-    return property;
-  } catch (error) {
-    console.error(error);
+    const result = await databases.getDocument(config.db, config.properties, id);
+    return result as Property;
+  } catch {
+    return null;
   }
 }
