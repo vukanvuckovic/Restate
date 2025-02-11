@@ -1,11 +1,13 @@
+import { Property } from "@/types";
 import { globalStyles } from "@/styles/globalStyles";
 import { useRouter } from "expo-router";
-import { HeartTick } from "iconsax-react-native";
+import { Heart } from "iconsax-react-native";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-const HomeFlatlistCard = ({ property }: { property: any }) => {
+const HomeFlatlistCard = ({ property }: { property: Property }) => {
   const router = useRouter();
+
   return (
     <TouchableOpacity
       onPress={() => router.push(`/property/${property.$id}`)}
@@ -19,40 +21,19 @@ const HomeFlatlistCard = ({ property }: { property: any }) => {
     >
       <Image
         source={{ uri: property.images[0] }}
-        style={{
-          height: 150,
-          width: "100%",
-          borderRadius: 4,
-          objectFit: "cover",
-        }}
+        style={{ height: 150, width: "100%", borderRadius: 4, objectFit: "cover" }}
       />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "space-between",
-          gap: 12,
-          padding: 4,
-        }}
-      >
+      <View style={{ flex: 1, justifyContent: "space-between", gap: 12, padding: 4 }}>
         <View>
           <Text style={globalStyles.cardTitle}>{property.name}</Text>
           <Text style={globalStyles.cardDesc}>
             {property.country}, {property.city}
           </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-          }}
-        >
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text style={globalStyles.cardPrice}>${property.price}</Text>
           <TouchableOpacity>
-            <HeartTick
-              size={16}
-              color={"gray"}
-            />
+            <Heart size={16} color="gray" />
           </TouchableOpacity>
         </View>
       </View>

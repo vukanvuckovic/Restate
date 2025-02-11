@@ -1,3 +1,4 @@
+import { Property } from "@/types";
 import { themeColors } from "@/constants/Colors";
 import { propertyAttributes } from "@/constants/data";
 import { globalStyles } from "@/styles/globalStyles";
@@ -6,8 +7,9 @@ import { Heart } from "iconsax-react-native";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-const ExploreCard = ({ property }: { property: any }) => {
+const ExploreCard = ({ property }: { property: Property }) => {
   const router = useRouter();
+
   return (
     <TouchableOpacity
       onPress={() => router.push(`/property/${property.$id}`)}
@@ -24,31 +26,12 @@ const ExploreCard = ({ property }: { property: any }) => {
         source={{ uri: property.images[0] }}
         style={{ aspectRatio: 1, borderRadius: 4 }}
       />
-      <View style={{ flex: 1, flexDirection: "row", padding: 8, gap: 10 }}>
-        <View
-          style={{
-            gap: 10,
-            flex: 1,
-            justifyContent: "space-between",
-          }}
-        >
-          <Text style={globalStyles.subheading}>{property.name}</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            {propertyAttributes.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
+      <View style={{ flex: 1, flexDirection: "row", padding: 4, gap: 10 }}>
+        <View style={{ gap: 10, flex: 1, justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>{property.name}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            {propertyAttributes.map((attr, index) => (
+              <View key={index} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                 <View
                   style={{
                     height: 20,
@@ -59,10 +42,10 @@ const ExploreCard = ({ property }: { property: any }) => {
                     backgroundColor: themeColors.lightBlue,
                   }}
                 >
-                  {item.smallIcon}
+                  {attr.smallIcon}
                 </View>
                 <Text style={{ fontSize: 14, color: "#212121" }}>
-                  {property[item.name.toLowerCase()]}
+                  {property[attr.name.toLowerCase() as keyof Property] as string}
                 </Text>
               </View>
             ))}
@@ -71,19 +54,9 @@ const ExploreCard = ({ property }: { property: any }) => {
             {property.city}, {property.country}
           </Text>
         </View>
-        <View
-          style={{
-            flexShrink: 0,
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            gap: 10,
-          }}
-        >
+        <View style={{ flexShrink: 0, alignItems: "flex-end", justifyContent: "space-between", gap: 10 }}>
           <TouchableOpacity style={{ flexShrink: 0 }}>
-            <Heart
-              size={16}
-              color={themeColors.gray}
-            />
+            <Heart size={16} color={themeColors.gray} />
           </TouchableOpacity>
           <Text style={globalStyles.cardPrice}>${property.price}</Text>
         </View>

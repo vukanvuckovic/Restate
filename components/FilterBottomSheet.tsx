@@ -30,8 +30,6 @@ const FilterBottomSheet = ({
     areaTo: "0",
   };
 
-  console.log(initialFilters);
-
   const {
     priceFrom = initialFilters.priceFrom,
     priceTo = initialFilters.priceTo,
