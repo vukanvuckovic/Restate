@@ -1,45 +1,40 @@
+import { getMyBookings } from "@/appwrite/bookingActions";
 import MyBookingCard from "@/components/MyBookingCard";
 import TopBar from "@/components/TopBar";
-import { themeColors } from "@/constants/Colors";
-import { globalStyles } from "@/styles/globalStyles";
-import { useRouter } from "expo-router";
-import { ArrowLeft2, Heart } from "iconsax-react-native";
-import React from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Booking } from "@/types";
+import { Skeleton } from "moti/skeleton";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 
-const myBookings = () => {
-  const router = useRouter();
+const MyBookings = () => {
+  const [bookings, setBookings] = useState<Booking[] | null>(null);
+
+  useEffect(() => {
+    getMyBookings().then(setBookings);
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <TopBar title="My Bookings" />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
-        <SafeAreaView style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              gap: 12,
-              paddingHorizontal: 16,
-              paddingVertical: 20,
-            }}
-          >
-            <MyBookingCard />
-            <MyBookingCard />
-            <MyBookingCard />
-            <MyBookingCard />
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+          <View style={{ flex: 1, gap: 12, paddingHorizontal: 16, paddingVertical: 20 }}>
+            {bookings === null ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} height={220} width="100%" colorMode="light" />
+              ))
+            ) : bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <MyBookingCard key={booking.$id} booking={booking} />
+              ))
+            ) : (
+              <Text style={{ alignSelf: "center" }}>No bookings yet.</Text>
+            )}
           </View>
-        </SafeAreaView>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 };
 
-export default myBookings;
+export default MyBookings;
