@@ -35,82 +35,82 @@ export const globalStyles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   subheading: {
     fontSize: 20,
-    fontWeight: 600,
+    fontWeight: "600",
   },
   agentName: {
     fontSize: 18,
-    fontWeight: 600,
+    fontWeight: "600",
   },
   standardText: {
     fontSize: 16,
-    fontWeight: 400,
+    fontWeight: "400",
     color: themeColors.standardText,
   },
   smallText: {
     fontSize: 14,
-    fontWeight: 400,
+    fontWeight: "400",
   },
   smallTextGray: {
     fontSize: 14,
-    fontWeight: 400,
+    fontWeight: "400",
     color: themeColors.smallTextGray,
   },
   smallTextBold: {
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: "500",
   },
   priceSubheading: {
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: "500",
     color: themeColors.standardText,
   },
   price: {
     fontSize: 24,
-    fontWeight: 600,
+    fontWeight: "600",
     color: themeColors.accentBlue,
   },
   propertyType: {
     fontSize: 10,
-    fontWeight: 600,
+    fontWeight: "600",
     textTransform: "uppercase",
     color: themeColors.accentBlue,
   },
   homeHeading: {
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 20,
   },
   seeAll: {
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 16,
     color: themeColors.accentBlue,
   },
   featuredHeading: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontSize: 20,
     color: "#fff",
   },
   featuredSubheading: {
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     color: "#fff",
   },
   featuredRating: {
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 12,
     color: themeColors.accentBlue,
   },
   profileHello: {
     fontSize: 12,
-    fontWeight: 400,
+    fontWeight: "400",
     color: themeColors.smallTextGray,
   },
   profileName: {
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: "500",
   },
   categoryButton: {
     height: 36,
@@ -131,26 +131,26 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
   },
   cardTitle: {
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 16,
   },
   cardDesc: {
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 12,
     color: themeColors.smallTextGray,
   },
   cardPrice: {
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 16,
     color: themeColors.accentBlue,
   },
   menuLink: {
-    fontWeight: 500,
+    fontWeight: "500",
     fontSize: 18,
   },
   barHeading: {
     fontSize: 20,
-    fontWeight: 500,
+    fontWeight: "500",
   },
   dateType: {
     paddingVertical: 10,

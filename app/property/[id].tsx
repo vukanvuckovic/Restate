@@ -3,6 +3,7 @@ import BookingBottomSheet from "@/components/BookingBottomSheet";
 import ReviewCard from "@/components/ReviewCard";
 import { themeColors } from "@/constants/Colors";
 import { facilitiesSpec, propertyAttributes } from "@/constants/data";
+import { useGlobalContext } from "@/hooks/useGlobalContext";
 import { globalStyles } from "@/styles/globalStyles";
 import { Property } from "@/types";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -36,6 +37,15 @@ const PropertyDetail = () => {
   const { width } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const router = useRouter();
+  const { user } = useGlobalContext();
+
+  const openBookingSheet = () => {
+    if (!user) {
+      router.push("/");
+      return;
+    }
+    bottomSheetRef.current?.expand();
+  };
 
   useEffect(() => {
     getProperty(id as string).then(setProperty);
@@ -385,7 +395,7 @@ const PropertyDetail = () => {
                 <Text style={[globalStyles.price, { fontWeight: "700" }]}>${property.price}</Text>
               </View>
               <TouchableOpacity
-                onPress={() => bottomSheetRef.current?.expand()}
+                onPress={openBookingSheet}
                 style={{
                   backgroundColor: themeColors.accentBlue,
                   paddingHorizontal: 50,

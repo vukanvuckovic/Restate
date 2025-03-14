@@ -1,50 +1,50 @@
-# Welcome to your Expo app 👋
+# HomeScope
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native property rental app for browsing, exploring, and booking residential properties — built to showcase a clean, production-grade mobile codebase.
 
-## Get started
+## Tech Stack
 
-1. Install dependencies
+- **React Native** + **Expo** (SDK 52)
+- **TypeScript** (strict)
+- **Appwrite** — auth, database, storage
+- **Expo Router** — file-based navigation
+- **Gorhom Bottom Sheet** — booking and filter modals
+- **Moti** — skeleton loaders
+- **React Native Maps** — property location view
 
-   ```bash
-   npm install
-   ```
+## Key Features
 
-2. Start the app
+- Google OAuth authentication
+- Property browsing with type filters and search
+- Advanced filters (price range, area) via bottom sheet
+- Property detail pages with image carousel, agent info, map, and reviews
+- Full-screen image gallery
+- Multi-step booking flow (guest info → payment)
+- User profile management
+- Booking and payment history
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Running Locally
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Copy `.env.example` to `.env` and fill in your Appwrite credentials:
 
-## Learn more
+```bash
+cp .env.example .env
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Start the app:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+### Seeding Data
 
-Join our community of developers creating universal apps.
+One-off seed scripts live in `scripts/`. Run them directly with `ts-node` or via the Expo REPL after configuring your Appwrite credentials.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Demo Credentials
+
+Sign in with any Google account — a user document is created automatically on first login.
