@@ -1,16 +1,10 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Animated, Alert, Easing, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Thumb from "./RangeSliderComps/Thumb";
-import Rail from "./RangeSliderComps/Rail";
-import RailSelected from "./RangeSliderComps/RailSelected";
-import Label from "./RangeSliderComps/Label";
-import Notch from "./RangeSliderComps/Notch";
 import { themeColors } from "@/constants/Colors";
 import { globalStyles } from "@/styles/globalStyles";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import RnRangeSlider from "rn-range-slider";
 import { MoneySend } from "iconsax-react-native";
 import Counter from "./Counter";
 import { useGlobalContext } from "@/hooks/useGlobalContext";
