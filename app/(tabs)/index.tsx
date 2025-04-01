@@ -1,74 +1,229 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { getLatestProperties, getProperties } from "@/appwrite/propertyActions";
+import FeaturedCard from "@/components/FeaturedCard";
+import HomeFlatlistCard from "@/components/HomeFlatlistCard";
+import { propertyTypes } from "@/constants/data";
+import { globalStyles } from "@/styles/globalStyles";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Notification,
+  Notification1,
+  NotificationBing,
+} from "iconsax-react-native";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Models } from "react-native-appwrite";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const Home = () => {
+  const [loading, setLoading] = useState(true);
+  const [featuredProperties, setFeaturedProperties] =
+    useState<Models.Document[]>();
+  const [recommendedProperties, setRecommendedProperties] =
+    useState<Models.Document[]>();
 
-export default function HomeScreen() {
+  const { propertyType } = useLocalSearchParams();
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setFeaturedProperties(await getLatestProperties());
+      setRecommendedProperties(await getProperties({ limit: 20 }));
+      setLoading(false);
+    };
+    fetchProperties();
+  }, []);
+
+  const router = useRouter();
+
+  const data = Array.from({ length: 10 }, (_, i) => ({
+    id: i,
+    text: `Item ${i + 1}`,
+  }));
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1, paddingTop: 12, gap: 30 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 20,
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+              >
+                <View
+                  style={{
+                    height: 44,
+                    width: 44,
+                    borderRadius: 100,
+                    backgroundColor: "gray",
+                  }}
+                />
+                <View style={{ gap: 4 }}>
+                  <Text style={globalStyles.profileHello}>Good Morning</Text>
+                  <Text style={globalStyles.profileName}>
+                    Vukan Vuckovic - prop - {propertyType}
+                  </Text>
+                </View>
+              </View>
+              <NotificationBing
+                size={20}
+                color="black"
+              />
+            </View>
+            <View style={{ gap: 12 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={globalStyles.homeHeading}>Featured</Text>
+                <Text style={globalStyles.seeAll}>See All</Text>
+              </View>
+              <View>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 10,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    {featuredProperties ? (
+                      featuredProperties.length > 0 ? (
+                        featuredProperties.map((property, index) => (
+                          <FeaturedCard
+                            property={property}
+                            key={index}
+                          />
+                        ))
+                      ) : (
+                        <Text
+                          style={{ alignSelf: "center", paddingVertical: 24 }}
+                        >
+                          No Featured Properties
+                        </Text>
+                      )
+                    ) : (
+                      Array.from({ length: 6 }).map((_, index) => (
+                        <View
+                          key={index}
+                          style={{
+                            height: 300,
+                            width: 220,
+                            borderRadius: 16,
+                          }}
+                        />
+                      ))
+                    )}
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={globalStyles.homeHeading}>Our Recommendation</Text>
+                <Text style={globalStyles.seeAll}>See All</Text>
+              </View>
+              <View style={{ marginTop: 12 }}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      gap: 8,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    {propertyTypes.map((item, index) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          router.setParams({ propertyType: item.value })
+                        }
+                        key={index}
+                        style={
+                          propertyType
+                            ? item.value === propertyType
+                              ? globalStyles.categorySelectedButton
+                              : globalStyles.categoryButton
+                            : item.value === "all"
+                            ? globalStyles.categorySelectedButton
+                            : globalStyles.categoryButton
+                        }
+                      >
+                        <Text
+                          style={
+                            propertyType
+                              ? item.value === propertyType && {
+                                  color: "white",
+                                  fontWeight: 500,
+                                }
+                              : item.value === "all" && {
+                                  color: "white",
+                                  fontWeight: 500,
+                                }
+                          }
+                        >
+                          {item.name}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
+              {!loading && (
+                <FlatList
+                  data={recommendedProperties}
+                  keyExtractor={(item) => item.$id.toString()}
+                  numColumns={2}
+                  scrollEnabled={false}
+                  contentContainerStyle={{ gap: 20, paddingVertical: 20 }}
+                  columnWrapperStyle={{
+                    justifyContent: "space-between",
+                    gap: 16,
+                    paddingHorizontal: 16,
+                  }}
+                  renderItem={({ item }) => (
+                    <HomeFlatlistCard property={item} />
+                  )}
+                />
+              )}
+            </View>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </GestureHandlerRootView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+export default Home;
